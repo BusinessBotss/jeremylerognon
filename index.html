@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jérémy Lerognon — Marbella Real Estate</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600&family=Noto+Sans+Arabic:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#0a0a0a;--bg2:#111111;--bg3:#1a1a1a;--bg4:#222222;
+  --text:#f0f0f0;--text2:#b0b0b0;--text3:#707070;
+  --neon:rgba(255,255,255,0.08);--neon-line:rgba(255,255,255,0.12);
+  --neon-glow:rgba(255,255,255,0.04);--accent:#e8e8e8;
+  --card-bg:rgba(17,17,17,0.85);--input-bg:rgba(26,26,26,0.9);
+  --border:rgba(255,255,255,0.08);--border-hover:rgba(255,255,255,0.18);
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+  --glow-soft:0 0 40px rgba(255,255,255,0.03);
+  --radius:14px;--radius-sm:10px;
+  --font-display:'Cormorant Garamond',serif;
+  --font-body:'Outfit',sans-serif;
+  --transition-theme:background-color 0.6s cubic-bezier(.4,0,.2,1),color 0.6s cubic-bezier(.4,0,.2,1),border-color 0.6s cubic-bezier(.4,0,.2,1),box-shadow 0.6s cubic-bezier(.4,0,.2,1),fill 0.6s cubic-bezier(.4,0,.2,1);
+}
+
+.light-mode{
+  --bg:#f5f3f0;--bg2:#ebe8e4;--bg3:#e0ddd8;--bg4:#d5d2cd;
+  --text:#1a1a1a;--text2:#555;--text3:#888;
+  --neon:rgba(0,0,0,0.05);--neon-line:rgba(0,0,0,0.1);
+  --neon-glow:rgba(0,0,0,0.02);--accent:#1a1a1a;
+  --card-bg:rgba(255,255,255,0.85);--input-bg:rgba(245,243,240,0.95);
+  --border:rgba(0,0,0,0.08);--border-hover:rgba(0,0,0,0.18);
+  --shadow:0 8px 32px rgba(0,0,0,0.08);
+  --glow-soft:0 0 40px rgba(0,0,0,0.02);
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+  transition:var(--transition-theme);
+}
+
+/* Subtle grain overlay */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ====== THEME TOGGLE ====== */
+.theme-toggle{
+  position:fixed;top:24px;right:24px;z-index:1000;
+  width:56px;height:30px;border-radius:15px;
+  background:var(--bg3);border:1px solid var(--border);
+  cursor:pointer;transition:var(--transition-theme);
+  display:flex;align-items:center;padding:3px;
+}
+.theme-toggle:hover{border-color:var(--border-hover)}
+.toggle-knob{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--text);transition:transform 0.4s cubic-bezier(.4,0,.2,1),background 0.4s;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;
+}
+.light-mode .toggle-knob{transform:translateX(26px)}
+.toggle-knob svg{width:14px;height:14px;fill:var(--bg);transition:var(--transition-theme)}
+
+/* ====== LANGUAGE SELECTOR ====== */
+.lang-selector{
+  position:fixed;top:24px;left:24px;z-index:1000;
+  display:flex;gap:4px;flex-wrap:wrap;max-width:260px;
+}
+.lang-btn{
+  padding:6px 12px;border-radius:20px;border:1px solid var(--border);
+  background:var(--card-bg);color:var(--text2);cursor:pointer;
+  font-family:var(--font-body);font-size:11px;font-weight:500;
+  letter-spacing:0.5px;text-transform:uppercase;
+  transition:all 0.3s;backdrop-filter:blur(10px);
+}
+.lang-btn:hover,.lang-btn.active{
+  background:var(--text);color:var(--bg);border-color:var(--text);
+}
+
+/* ====== MAIN CONTAINER ====== */
+.main{
+  max-width:520px;margin:0 auto;padding:100px 20px 60px;
+  display:flex;flex-direction:column;align-items:center;gap:40px;
+}
+
+/* ====== PROFILE SECTION ====== */
+.profile{
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  text-align:center;
+}
+.avatar-wrap{
+  position:relative;width:130px;height:130px;
+}
+.avatar-ring{
+  position:absolute;inset:-4px;border-radius:50%;
+  border:1px solid var(--neon-line);
+  animation:pulse-ring 3s ease-in-out infinite;
+}
+@keyframes pulse-ring{
+  0%,100%{opacity:0.3;transform:scale(1)}
+  50%{opacity:0.7;transform:scale(1.03)}
+}
+.avatar-glow{
+  position:absolute;inset:-20px;border-radius:50%;
+  background:radial-gradient(circle,var(--neon-glow) 0%,transparent 70%);
+  filter:blur(10px);
+}
+.avatar{
+  width:130px;height:130px;border-radius:50%;
+  object-fit:cover;position:relative;z-index:2;
+  border:2px solid var(--neon-line);
+  transition:var(--transition-theme);
+}
+.profile-name{
+  font-family:var(--font-display);font-size:2.2rem;font-weight:300;
+  letter-spacing:0.02em;line-height:1.1;
+  transition:var(--transition-theme);
+}
+.profile-title{
+  font-size:0.8rem;font-weight:300;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--text2);
+  transition:var(--transition-theme);
+}
+.profile-location{
+  font-size:0.75rem;color:var(--text3);letter-spacing:0.1em;
+  display:flex;align-items:center;gap:6px;
+  transition:var(--transition-theme);
+}
+.profile-location::before{
+  content:'';width:4px;height:4px;border-radius:50%;
+  background:var(--text3);
+}
+
+/* Social links */
+.socials{display:flex;gap:14px;margin-top:4px}
+.social-link{
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card-bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.3s;backdrop-filter:blur(10px);
+  text-decoration:none;
+}
+.social-link:hover{
+  border-color:var(--border-hover);transform:translateY(-2px);
+  box-shadow:var(--glow-soft);
+}
+.social-link svg{width:16px;height:16px;fill:var(--text2);transition:var(--transition-theme)}
+.social-link:hover svg{fill:var(--text)}
+
+/* ====== ABOUT CARD ====== */
+.about-card{
+  width:100%;background:var(--card-bg);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 24px;backdrop-filter:blur(20px);
+  transition:var(--transition-theme);
+  box-shadow:var(--shadow);
+}
+.about-label{
+  font-size:0.65rem;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:14px;
+  transition:var(--transition-theme);
+}
+.about-text{
+  font-size:0.88rem;line-height:1.75;color:var(--text2);font-weight:300;
+  transition:var(--transition-theme);
+}
+.about-stats{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;
+  margin-top:20px;padding-top:20px;
+  border-top:1px solid var(--border);
+}
+.stat{text-align:center}
+.stat-num{
+  font-family:var(--font-display);font-size:1.6rem;font-weight:600;
+  color:var(--text);transition:var(--transition-theme);
+}
+.stat-label{
+  font-size:0.65rem;color:var(--text3);letter-spacing:0.1em;
+  text-transform:uppercase;margin-top:2px;
+  transition:var(--transition-theme);
+}
+
+/* ====== FORM CARD ====== */
+.form-card{
+  width:100%;background:var(--card-bg);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 24px;backdrop-filter:blur(20px);
+  transition:var(--transition-theme);
+  box-shadow:var(--shadow);
+}
+.form-label{
+  font-size:0.65rem;font-weight:500;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--text3);margin-bottom:20px;
+  transition:var(--transition-theme);
+}
+.form-group{margin-bottom:16px}
+.form-group label{
+  display:block;font-size:0.72rem;font-weight:400;
+  letter-spacing:0.08em;color:var(--text2);margin-bottom:6px;
+  text-transform:uppercase;transition:var(--transition-theme);
+}
+.select-wrap{position:relative}
+.select-wrap::after{
+  content:'';position:absolute;right:14px;top:50%;
+  transform:translateY(-50%) rotate(45deg);
+  width:6px;height:6px;
+  border-right:1.5px solid var(--text3);
+  border-bottom:1.5px solid var(--text3);
+  pointer-events:none;transition:var(--transition-theme);
+}
+select,input[type="text"],input[type="tel"]{
+  width:100%;padding:12px 16px;
+  background:var(--input-bg);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);
+  font-family:var(--font-body);font-size:0.85rem;font-weight:300;
+  appearance:none;-webkit-appearance:none;
+  transition:all 0.3s;cursor:pointer;outline:none;
+}
+select:hover,input:hover{border-color:var(--border-hover)}
+select:focus,input:focus{border-color:var(--text3);box-shadow:0 0 0 3px var(--neon)}
+select option{background:var(--bg2);color:var(--text)}
+input::placeholder{color:var(--text3)}
+
+.budget-range{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+
+/* CTA Button */
+.cta-btn{
+  width:100%;margin-top:24px;padding:16px;
+  border:1px solid var(--neon-line);border-radius:var(--radius-sm);
+  background:var(--text);color:var(--bg);
+  font-family:var(--font-body);font-size:0.85rem;font-weight:500;
+  letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.4s;
+  position:relative;overflow:hidden;
+  text-decoration:none;display:flex;
+  align-items:center;justify-content:center;gap:10px;
+}
+.cta-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(255,255,255,0.1);
+}
+.light-mode .cta-btn:hover{
+  box-shadow:0 8px 30px rgba(0,0,0,0.15);
+}
+.cta-btn svg{width:16px;height:16px;fill:var(--bg);transition:var(--transition-theme)}
+.cta-btn .btn-pulse{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
+  transform:translateX(-100%);
+  animation:btn-sweep 3s ease-in-out infinite;
+}
+@keyframes btn-sweep{
+  0%{transform:translateX(-100%)}
+  50%{transform:translateX(100%)}
+  100%{transform:translateX(100%)}
+}
+
+/* WhatsApp secondary */
+.wa-btn{
+  width:100%;margin-top:10px;padding:14px;
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  background:transparent;color:var(--text);
+  font-family:var(--font-body);font-size:0.8rem;font-weight:400;
+  letter-spacing:0.1em;text-transform:uppercase;
+  cursor:pointer;transition:all 0.3s;
+  text-decoration:none;display:flex;
+  align-items:center;justify-content:center;gap:10px;
+}
+.wa-btn:hover{border-color:var(--border-hover);background:var(--neon)}
+.wa-btn svg{width:16px;height:16px;fill:#25d366}
+
+/* ====== FOOTER ====== */
+.footer{
+  text-align:center;padding:20px 0;
+  font-size:0.65rem;color:var(--text3);letter-spacing:0.1em;
+  transition:var(--transition-theme);
+}
+
+/* ====== AMBIENT LINE ====== */
+.ambient-line{
+  position:fixed;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--neon-line),transparent);
+  z-index:999;transition:var(--transition-theme);
+}
+
+/* ====== RTL SUPPORT ====== */
+[dir="rtl"] .form-group label{text-align:right}
+[dir="rtl"] .select-wrap::after{right:auto;left:14px}
+[dir="rtl"] select{padding:12px 16px 12px 36px}
+[dir="rtl"] .profile-location{flex-direction:row-reverse}
+[dir="rtl"] .about-text{text-align:right}
+[dir="rtl"] .about-label,.form-label{text-align:right}
+[dir="rtl"]{font-family:'Noto Sans Arabic',var(--font-body)}
+
+/* ====== ANIMATIONS ====== */
+.fade-up{
+  opacity:0;transform:translateY(20px);
+  animation:fadeUp 0.7s cubic-bezier(.4,0,.2,1) forwards;
+}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.delay-1{animation-delay:0.1s}
+.delay-2{animation-delay:0.2s}
+.delay-3{animation-delay:0.3s}
+.delay-4{animation-delay:0.4s}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:560px){
+  .main{padding:90px 16px 40px}
+  .profile-name{font-size:1.8rem}
+  .lang-selector{top:auto;bottom:16px;left:50%;transform:translateX(-50%);
+    justify-content:center;max-width:90vw;z-index:1001;
+    background:var(--card-bg);padding:8px 12px;border-radius:20px;
+    border:1px solid var(--border);backdrop-filter:blur(20px);}
+  .theme-toggle{top:16px;right:16px}
+  .about-stats{grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .footer{padding-bottom:70px}
+}
+</style>
+</head>
+<body>
+<div class="ambient-line"></div>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <div class="toggle-knob">
+    <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <svg class="icon-sun" style="display:none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+  </div>
+</button>
+
+<!-- Language Selector -->
+<div class="lang-selector" id="langSelector">
+  <button class="lang-btn active" data-lang="es">ES</button>
+  <button class="lang-btn" data-lang="en">EN</button>
+  <button class="lang-btn" data-lang="fr">FR</button>
+  <button class="lang-btn" data-lang="it">IT</button>
+  <button class="lang-btn" data-lang="de">DE</button>
+  <button class="lang-btn" data-lang="ar">عر</button>
+</div>
+
+<main class="main">
+  <!-- Profile -->
+  <section class="profile fade-up">
+    <div class="avatar-wrap">
+      <div class="avatar-glow"></div>
+      <div class="avatar-ring"></div>
+      <img class="avatar" src="https://res.cloudinary.com/ddjl4shzl/image/upload/v1773744006/Screenshot_2026-03-17_at_11.39.48_rs8mhy.png" alt="Jérémy Lerognon">
+    </div>
+    <h1 class="profile-name">Jérémy Lerognon</h1>
+    <p class="profile-title" data-i18n="profile_title">Asesor Inmobiliario — Marbella</p>
+    <p class="profile-location" data-i18n="profile_location">Costa del Sol, España</p>
+    <div class="socials">
+      <a href="https://www.instagram.com/jeremih_l?igsh=MWlxbzEyZDUxdmUweg==" target="_blank" class="social-link" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/j%C3%A9r%C3%A9my-lerognon-8bb368261" target="_blank" class="social-link" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="about-card fade-up delay-1">
+    <p class="about-label" data-i18n="about_label">Sobre mí</p>
+    <p class="about-text" data-i18n="about_text">Marbella atrae a más de 14 millones de visitantes al año, con más de 320 días de sol. La región, conocida como la "Costa del Golf", cuenta con cerca de 70 campos, atrayendo una clientela internacional todo el año. Le guío para elegir la mejor ubicación, analizar la demanda de alquiler y maximizar su rendimiento de inversión.</p>
+    <div class="about-stats">
+      <div class="stat">
+        <div class="stat-num">320+</div>
+        <div class="stat-label" data-i18n="stat_sun">Días de sol</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">70</div>
+        <div class="stat-label" data-i18n="stat_golf">Campos de golf</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">14M</div>
+        <div class="stat-label" data-i18n="stat_visitors">Visitantes/año</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search Form -->
+  <section class="form-card fade-up delay-2">
+    <p class="form-label" data-i18n="form_label">Encuentre su propiedad ideal</p>
+
+    <div class="form-group">
+      <label data-i18n="label_type">Tipo de operación</label>
+      <div class="select-wrap">
+        <select id="operationType" data-i18n-options="type_options">
+          <option value="">— Seleccione —</option>
+          <option value="buy">Comprar</option>
+          <option value="rent">Alquilar</option>
+          <option value="invest">Invertir</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label data-i18n="label_property">Tipo de propiedad</label>
+      <div class="select-wrap">
+        <select id="propertyType" data-i18n-options="property_options">
+          <option value="">— Seleccione —</option>
+          <option value="apartment">Apartamento</option>
+          <option value="villa">Villa</option>
+          <option value="penthouse">Ático</option>
+          <option value="townhouse">Adosado</option>
+          <option value="land">Terreno</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label data-i18n="label_zone">Zona preferida</label>
+      <div class="select-wrap">
+        <select id="zone">
+          <option value="">— Seleccione —</option>
+          <option value="golden-mile">Golden Mile</option>
+          <option value="nueva-andalucia">Nueva Andalucía</option>
+          <option value="puerto-banus">Puerto Banús</option>
+          <option value="san-pedro">San Pedro de Alcántara</option>
+          <option value="estepona">Estepona</option>
+          <option value="benahavis">Benahavís</option>
+          <option value="marbella-east">Marbella Este</option>
+          <option value="other" data-i18n-opt="zone_other">Otra zona</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label data-i18n="label_bedrooms">Habitaciones</label>
+      <div class="select-wrap">
+        <select id="bedrooms" data-i18n-options="bedroom_options">
+          <option value="">— Seleccione —</option>
+          <option value="studio">Estudio</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4+</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label data-i18n="label_budget">Presupuesto (€)</label>
+      <div class="budget-range">
+        <div class="select-wrap">
+          <select id="budgetMin" data-i18n-options="budget_min_options">
+            <option value="">Mín</option>
+            <option value="100000">100.000</option>
+            <option value="200000">200.000</option>
+            <option value="350000">350.000</option>
+            <option value="500000">500.000</option>
+            <option value="750000">750.000</option>
+            <option value="1000000">1.000.000</option>
+          </select>
+        </div>
+        <div class="select-wrap">
+          <select id="budgetMax" data-i18n-options="budget_max_options">
+            <option value="">Máx</option>
+            <option value="200000">200.000</option>
+            <option value="350000">350.000</option>
+            <option value="500000">500.000</option>
+            <option value="750000">750.000</option>
+            <option value="1000000">1.000.000</option>
+            <option value="2000000">2.000.000+</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label data-i18n="label_name">Nombre</label>
+      <input type="text" id="clientName" data-i18n-placeholder="placeholder_name">
+    </div>
+
+    <div class="form-group">
+      <label data-i18n="label_phone">Teléfono</label>
+      <input type="tel" id="clientPhone" data-i18n-placeholder="placeholder_phone">
+    </div>
+
+    <!-- CTA Call -->
+    <a href="tel:+33665333258" class="cta-btn" id="ctaCall">
+      <span class="btn-pulse"></span>
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      <span data-i18n="cta_call">Llamar ahora</span>
+    </a>
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/33665333258" target="_blank" class="wa-btn" id="waBtn">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span data-i18n="cta_whatsapp">WhatsApp</span>
+    </a>
+  </section>
+
+  <footer class="footer fade-up delay-4">
+    <span data-i18n="footer">© 2026 Jérémy Lerognon — Marbella Real Estate</span>
+  </footer>
+</main>
+
+<script>
+// ===================== i18n DATA =====================
+const translations = {
+  es: {
+    profile_title: "Asesor Inmobiliario — Marbella",
+    profile_location: "Costa del Sol, España",
+    about_label: "Sobre mí",
+    about_text: "Marbella atrae a más de 14 millones de visitantes al año, con más de 320 días de sol. La región, conocida como la \"Costa del Golf\", cuenta con cerca de 70 campos, atrayendo una clientela internacional todo el año. Le guío para elegir la mejor ubicación, analizar la demanda de alquiler y maximizar su rendimiento de inversión.",
+    stat_sun: "Días de sol", stat_golf: "Campos de golf", stat_visitors: "Visitantes/año",
+    form_label: "Encuentre su propiedad ideal",
+    label_type: "Tipo de operación", label_property: "Tipo de propiedad",
+    label_zone: "Zona preferida", label_bedrooms: "Habitaciones",
+    label_budget: "Presupuesto (€)", label_name: "Nombre", label_phone: "Teléfono",
+    placeholder_name: "Su nombre", placeholder_phone: "+34 ...",
+    type_options: ["— Seleccione —","Comprar","Alquilar","Invertir"],
+    property_options: ["— Seleccione —","Apartamento","Villa","Ático","Adosado","Terreno"],
+    bedroom_options: ["— Seleccione —","Estudio","1","2","3","4+"],
+    budget_min_options: ["Mín","100.000","200.000","350.000","500.000","750.000","1.000.000"],
+    budget_max_options: ["Máx","200.000","350.000","500.000","750.000","1.000.000","2.000.000+"],
+    zone_other: "Otra zona",
+    cta_call: "Llamar ahora", cta_whatsapp: "WhatsApp",
+    footer: "© 2026 Jérémy Lerognon — Marbella Real Estate"
+  },
+  en: {
+    profile_title: "Real Estate Advisor — Marbella",
+    profile_location: "Costa del Sol, Spain",
+    about_label: "About me",
+    about_text: "Marbella attracts over 14 million visitors a year, with more than 320 days of sunshine. The region, known as the \"Costa del Golf\", has around 70 courses, drawing international clientele year-round. I guide you to choose the best location, analyse rental demand, and maximise your investment return.",
+    stat_sun: "Days of sun", stat_golf: "Golf courses", stat_visitors: "Visitors/year",
+    form_label: "Find your ideal property",
+    label_type: "Operation type", label_property: "Property type",
+    label_zone: "Preferred zone", label_bedrooms: "Bedrooms",
+    label_budget: "Budget (€)", label_name: "Name", label_phone: "Phone",
+    placeholder_name: "Your name", placeholder_phone: "+44 ...",
+    type_options: ["— Select —","Buy","Rent","Invest"],
+    property_options: ["— Select —","Apartment","Villa","Penthouse","Townhouse","Land"],
+    bedroom_options: ["— Select —","Studio","1","2","3","4+"],
+    budget_min_options: ["Min","100,000","200,000","350,000","500,000","750,000","1,000,000"],
+    budget_max_options: ["Max","200,000","350,000","500,000","750,000","1,000,000","2,000,000+"],
+    zone_other: "Other zone",
+    cta_call: "Call now", cta_whatsapp: "WhatsApp",
+    footer: "© 2026 Jérémy Lerognon — Marbella Real Estate"
+  },
+  fr: {
+    profile_title: "Conseiller Immobilier — Marbella",
+    profile_location: "Costa del Sol, Espagne",
+    about_label: "À propos",
+    about_text: "Marbella attire chaque année plus de 14 millions de visiteurs et bénéficie de plus de 320 jours de soleil. La région, surnommée la \"Costa del Golf\", compte environ 70 parcours, attirant une clientèle internationale toute l'année. Je vous guide pour choisir le meilleur emplacement, analyser la demande locative et maximiser votre rendement.",
+    stat_sun: "Jours de soleil", stat_golf: "Parcours de golf", stat_visitors: "Visiteurs/an",
+    form_label: "Trouvez votre bien idéal",
+    label_type: "Type d'opération", label_property: "Type de bien",
+    label_zone: "Zone souhaitée", label_bedrooms: "Chambres",
+    label_budget: "Budget (€)", label_name: "Nom", label_phone: "Téléphone",
+    placeholder_name: "Votre nom", placeholder_phone: "+33 ...",
+    type_options: ["— Sélectionnez —","Acheter","Louer","Investir"],
+    property_options: ["— Sélectionnez —","Appartement","Villa","Penthouse","Maison mitoyenne","Terrain"],
+    bedroom_options: ["— Sélectionnez —","Studio","1","2","3","4+"],
+    budget_min_options: ["Min","100 000","200 000","350 000","500 000","750 000","1 000 000"],
+    budget_max_options: ["Max","200 000","350 000","500 000","750 000","1 000 000","2 000 000+"],
+    zone_other: "Autre zone",
+    cta_call: "Appeler maintenant", cta_whatsapp: "WhatsApp",
+    footer: "© 2026 Jérémy Lerognon — Immobilier Marbella"
+  },
+  it: {
+    profile_title: "Consulente Immobiliare — Marbella",
+    profile_location: "Costa del Sol, Spagna",
+    about_label: "Chi sono",
+    about_text: "Marbella attira ogni anno più di 14 milioni di visitatori, con oltre 320 giorni di sole. La regione, conosciuta come la \"Costa del Golf\", conta circa 70 campi, attirando una clientela internazionale tutto l'anno. Vi guido nella scelta della posizione migliore, nell'analisi della domanda di affitto e nella massimizzazione del rendimento.",
+    stat_sun: "Giorni di sole", stat_golf: "Campi da golf", stat_visitors: "Visitatori/anno",
+    form_label: "Trova la tua proprietà ideale",
+    label_type: "Tipo di operazione", label_property: "Tipo di proprietà",
+    label_zone: "Zona preferita", label_bedrooms: "Camere",
+    label_budget: "Budget (€)", label_name: "Nome", label_phone: "Telefono",
+    placeholder_name: "Il tuo nome", placeholder_phone: "+39 ...",
+    type_options: ["— Seleziona —","Comprare","Affittare","Investire"],
+    property_options: ["— Seleziona —","Appartamento","Villa","Attico","Villetta","Terreno"],
+    bedroom_options: ["— Seleziona —","Monolocale","1","2","3","4+"],
+    budget_min_options: ["Min","100.000","200.000","350.000","500.000","750.000","1.000.000"],
+    budget_max_options: ["Max","200.000","350.000","500.000","750.000","1.000.000","2.000.000+"],
+    zone_other: "Altra zona",
+    cta_call: "Chiama ora", cta_whatsapp: "WhatsApp",
+    footer: "© 2026 Jérémy Lerognon — Immobiliare Marbella"
+  },
+  de: {
+    profile_title: "Immobilienberater — Marbella",
+    profile_location: "Costa del Sol, Spanien",
+    about_label: "Über mich",
+    about_text: "Marbella zieht jährlich über 14 Millionen Besucher an, mit mehr als 320 Sonnentagen. Die Region, bekannt als die \"Costa del Golf\", verfügt über rund 70 Plätze und zieht ganzjährig internationale Kunden an. Ich begleite Sie bei der Wahl des besten Standorts, der Analyse der Mietnachfrage und der Maximierung Ihrer Rendite.",
+    stat_sun: "Sonnentage", stat_golf: "Golfplätze", stat_visitors: "Besucher/Jahr",
+    form_label: "Finden Sie Ihre Traumimmobilie",
+    label_type: "Transaktionstyp", label_property: "Immobilientyp",
+    label_zone: "Bevorzugte Zone", label_bedrooms: "Schlafzimmer",
+    label_budget: "Budget (€)", label_name: "Name", label_phone: "Telefon",
+    placeholder_name: "Ihr Name", placeholder_phone: "+49 ...",
+    type_options: ["— Auswählen —","Kaufen","Mieten","Investieren"],
+    property_options: ["— Auswählen —","Wohnung","Villa","Penthouse","Reihenhaus","Grundstück"],
+    bedroom_options: ["— Auswählen —","Studio","1","2","3","4+"],
+    budget_min_options: ["Min","100.000","200.000","350.000","500.000","750.000","1.000.000"],
+    budget_max_options: ["Max","200.000","350.000","500.000","750.000","1.000.000","2.000.000+"],
+    zone_other: "Andere Zone",
+    cta_call: "Jetzt anrufen", cta_whatsapp: "WhatsApp",
+    footer: "© 2026 Jérémy Lerognon — Immobilien Marbella"
+  },
+  ar: {
+    profile_title: "مستشار عقاري — ماربيا",
+    profile_location: "كوستا ديل سول، إسبانيا",
+    about_label: "نبذة عني",
+    about_text: "تستقطب ماربيا أكثر من 14 مليون زائر سنوياً، مع أكثر من 320 يوم مشمس. المنطقة المعروفة بـ\"كوستا ديل غولف\" تضم حوالي 70 ملعب غولف، وتجذب عملاء دوليين على مدار العام. أرشدكم لاختيار أفضل موقع، وتحليل الطلب على الإيجار، وتعظيم عائد استثماركم.",
+    stat_sun: "يوم مشمس", stat_golf: "ملعب غولف", stat_visitors: "زائر/سنة",
+    form_label: "ابحث عن عقارك المثالي",
+    label_type: "نوع العملية", label_property: "نوع العقار",
+    label_zone: "المنطقة المفضلة", label_bedrooms: "غرف النوم",
+    label_budget: "الميزانية (€)", label_name: "الاسم", label_phone: "الهاتف",
+    placeholder_name: "اسمك", placeholder_phone: "... +",
+    type_options: ["— اختر —","شراء","إيجار","استثمار"],
+    property_options: ["— اختر —","شقة","فيلا","بنتهاوس","تاون هاوس","أرض"],
+    bedroom_options: ["— اختر —","استوديو","1","2","3","+4"],
+    budget_min_options: ["الحد الأدنى","100,000","200,000","350,000","500,000","750,000","1,000,000"],
+    budget_max_options: ["الحد الأقصى","200,000","350,000","500,000","750,000","1,000,000","+2,000,000"],
+    zone_other: "منطقة أخرى",
+    cta_call: "اتصل الآن", cta_whatsapp: "واتساب",
+    footer: "© 2026 جيريمي ليروغنون — عقارات ماربيا"
+  }
+};
+
+// ===================== APPLY LANGUAGE =====================
+let currentLang = 'es';
+
+function setLanguage(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  const isRTL = lang === 'ar';
+  
+  document.documentElement.lang = lang;
+  document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+
+  // Update text content
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+
+  // Update placeholders
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (t[key]) el.placeholder = t[key];
+  });
+
+  // Update select options
+  document.querySelectorAll('[data-i18n-options]').forEach(sel => {
+    const key = sel.getAttribute('data-i18n-options');
+    if (t[key]) {
+      const opts = sel.querySelectorAll('option');
+      t[key].forEach((text, i) => { if (opts[i]) opts[i].textContent = text; });
+    }
+  });
+
+  // Zone "other"
+  const otherOpt = document.querySelector('[data-i18n-opt="zone_other"]');
+  if (otherOpt && t.zone_other) otherOpt.textContent = t.zone_other;
+
+  // WhatsApp message
+  const waMsg = {
+    es: "Hola Jérémy, estoy interesado en propiedades en Marbella.",
+    en: "Hello Jérémy, I'm interested in properties in Marbella.",
+    fr: "Bonjour Jérémy, je suis intéressé par des biens à Marbella.",
+    it: "Ciao Jérémy, sono interessato a proprietà a Marbella.",
+    de: "Hallo Jérémy, ich interessiere mich für Immobilien in Marbella.",
+    ar: "مرحباً جيريمي، أنا مهتم بالعقارات في ماربيا."
+  };
+  document.getElementById('waBtn').href = `https://wa.me/33665333258?text=${encodeURIComponent(waMsg[lang]||waMsg.en)}`;
+
+  // Active button
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+}
+
+// ===================== THEME TOGGLE =====================
+const toggle = document.getElementById('themeToggle');
+const iconMoon = toggle.querySelector('.icon-moon');
+const iconSun = toggle.querySelector('.icon-sun');
+let isDark = true;
+
+toggle.addEventListener('click', () => {
+  isDark = !isDark;
+  document.body.classList.toggle('light-mode', !isDark);
+  iconMoon.style.display = isDark ? 'block' : 'none';
+  iconSun.style.display = isDark ? 'none' : 'block';
+});
+
+// ===================== LANGUAGE BUTTONS =====================
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+});
+
+// ===================== BUILD WHATSAPP CTA WITH FORM DATA =====================
+document.getElementById('ctaCall').addEventListener('click', (e) => {
+  // Just allow the tel: link to work naturally
+});
+
+// Init
+setLanguage('es');
+</script>
+</body>
+</html>
