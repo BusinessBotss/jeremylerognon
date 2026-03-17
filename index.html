@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -337,8 +337,8 @@ input::placeholder{color:var(--text3)}
 
 <!-- Language Selector -->
 <div class="lang-selector" id="langSelector">
-  <button class="lang-btn active" data-lang="es">ES</button>
-  <button class="lang-btn" data-lang="en">EN</button>
+  <button class="lang-btn" data-lang="es">ES</button>
+  <button class="lang-btn active" data-lang="en">EN</button>
   <button class="lang-btn" data-lang="fr">FR</button>
   <button class="lang-btn" data-lang="it">IT</button>
   <button class="lang-btn" data-lang="de">DE</button>
@@ -660,7 +660,7 @@ const translations = {
 };
 
 // ===================== APPLY LANGUAGE =====================
-let currentLang = 'es';
+let currentLang = 'en';
 
 function setLanguage(lang) {
   currentLang = lang;
@@ -775,7 +775,7 @@ document.querySelectorAll('.lang-btn').forEach(btn => {
 });
 
 // Init
-setLanguage('es');
+setLanguage('en');
 </script>
 </body>
 </html>
