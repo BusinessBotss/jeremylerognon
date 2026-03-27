@@ -213,15 +213,16 @@ body::before{
   border-bottom:1.5px solid var(--text3);
   pointer-events:none;transition:var(--transition-theme);
 }
-select,input[type="text"],input[type="tel"]{
+select,input[type="text"],input[type="tel"],input[type="number"]{
   width:100%;padding:12px 16px;
   background:var(--input-bg);border:1px solid var(--border);
   border-radius:var(--radius-sm);color:var(--text);
   font-family:var(--font-body);font-size:0.85rem;font-weight:300;
   appearance:none;-webkit-appearance:none;
-  transition:all 0.3s;cursor:pointer;outline:none;
+  transition:all 0.3s;outline:none;
 }
-select:hover,input:hover{border-color:var(--border-hover)}
+select{cursor:pointer}
+input:hover,select:hover{border-color:var(--border-hover)}
 select:focus,input:focus{border-color:var(--text3);box-shadow:0 0 0 3px var(--neon)}
 select option{background:var(--bg2);color:var(--text)}
 input::placeholder{color:var(--text3)}
@@ -441,28 +442,8 @@ input::placeholder{color:var(--text3)}
     <div class="form-group">
       <label data-i18n="label_budget">Presupuesto (€)</label>
       <div class="budget-range">
-        <div class="select-wrap">
-          <select id="budgetMin" data-i18n-options="budget_min_options">
-            <option value="">Mín</option>
-            <option value="100000">100.000</option>
-            <option value="200000">200.000</option>
-            <option value="350000">350.000</option>
-            <option value="500000">500.000</option>
-            <option value="750000">750.000</option>
-            <option value="1000000">1.000.000</option>
-          </select>
-        </div>
-        <div class="select-wrap">
-          <select id="budgetMax" data-i18n-options="budget_max_options">
-            <option value="">Máx</option>
-            <option value="200000">200.000</option>
-            <option value="350000">350.000</option>
-            <option value="500000">500.000</option>
-            <option value="750000">750.000</option>
-            <option value="1000000">1.000.000</option>
-            <option value="2000000">2.000.000+</option>
-          </select>
-        </div>
+        <input type="number" id="budgetMin" min="0" step="1000" placeholder="Min. 250000">
+        <input type="number" id="budgetMax" min="0" step="1000" placeholder="Max. 950000">
       </div>
     </div>
 
@@ -484,7 +465,7 @@ input::placeholder{color:var(--text3)}
     </a>
 
     <!-- WhatsApp -->
-    <a href="https://wa.me/+34639774390" target="_blank" class="wa-btn" id="waBtn">
+    <a href="https://wa.me/34639774390" target="_blank" class="wa-btn" id="waBtn">
       <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       <span data-i18n="cta_whatsapp">WhatsApp</span>
     </a>
@@ -512,8 +493,6 @@ const translations = {
     type_options: ["— Seleccione —","Comprar","Alquilar","Invertir"],
     property_options: ["— Seleccione —","Apartamento","Villa","Ático","Adosado","Terreno"],
     bedroom_options: ["— Seleccione —","Estudio","1","2","3","4+"],
-    budget_min_options: ["Mín","100.000","200.000","350.000","500.000","750.000","1.000.000"],
-    budget_max_options: ["Máx","200.000","350.000","500.000","750.000","1.000.000","2.000.000+"],
     zone_other: "Otra zona",
     cta_call: "Llamar ahora", cta_whatsapp: "WhatsApp",
     footer: "© 2026 Jérémy Lerognon — Marbella Real Estate",
@@ -537,8 +516,6 @@ const translations = {
     type_options: ["— Select —","Buy","Rent","Invest"],
     property_options: ["— Select —","Apartment","Villa","Penthouse","Townhouse","Land"],
     bedroom_options: ["— Select —","Studio","1","2","3","4+"],
-    budget_min_options: ["Min","100,000","200,000","350,000","500,000","750,000","1,000,000"],
-    budget_max_options: ["Max","200,000","350,000","500,000","750,000","1,000,000","2,000,000+"],
     zone_other: "Other zone",
     cta_call: "Call now", cta_whatsapp: "WhatsApp",
     footer: "© 2026 Jérémy Lerognon — Marbella Real Estate",
@@ -562,8 +539,6 @@ const translations = {
     type_options: ["— Sélectionnez —","Acheter","Louer","Investir"],
     property_options: ["— Sélectionnez —","Appartement","Villa","Penthouse","Maison mitoyenne","Terrain"],
     bedroom_options: ["— Sélectionnez —","Studio","1","2","3","4+"],
-    budget_min_options: ["Min","100 000","200 000","350 000","500 000","750 000","1 000 000"],
-    budget_max_options: ["Max","200 000","350 000","500 000","750 000","1 000 000","2 000 000+"],
     zone_other: "Autre zone",
     cta_call: "Appeler maintenant", cta_whatsapp: "WhatsApp",
     footer: "© 2026 Jérémy Lerognon — Immobilier Marbella",
@@ -587,8 +562,6 @@ const translations = {
     type_options: ["— Seleziona —","Comprare","Affittare","Investire"],
     property_options: ["— Seleziona —","Appartamento","Villa","Attico","Villetta","Terreno"],
     bedroom_options: ["— Seleziona —","Monolocale","1","2","3","4+"],
-    budget_min_options: ["Min","100.000","200.000","350.000","500.000","750.000","1.000.000"],
-    budget_max_options: ["Max","200.000","350.000","500.000","750.000","1.000.000","2.000.000+"],
     zone_other: "Altra zona",
     cta_call: "Chiama ora", cta_whatsapp: "WhatsApp",
     footer: "© 2026 Jérémy Lerognon — Immobiliare Marbella",
@@ -612,8 +585,6 @@ const translations = {
     type_options: ["— Auswählen —","Kaufen","Mieten","Investieren"],
     property_options: ["— Auswählen —","Wohnung","Villa","Penthouse","Reihenhaus","Grundstück"],
     bedroom_options: ["— Auswählen —","Studio","1","2","3","4+"],
-    budget_min_options: ["Min","100.000","200.000","350.000","500.000","750.000","1.000.000"],
-    budget_max_options: ["Max","200.000","350.000","500.000","750.000","1.000.000","2.000.000+"],
     zone_other: "Andere Zone",
     cta_call: "Jetzt anrufen", cta_whatsapp: "WhatsApp",
     footer: "© 2026 Jérémy Lerognon — Immobilien Marbella",
@@ -637,8 +608,6 @@ const translations = {
     type_options: ["— اختر —","شراء","إيجار","استثمار"],
     property_options: ["— اختر —","شقة","فيلا","بنتهاوس","تاون هاوس","أرض"],
     bedroom_options: ["— اختر —","استوديو","1","2","3","+4"],
-    budget_min_options: ["الحد الأدنى","100,000","200,000","350,000","500,000","750,000","1,000,000"],
-    budget_max_options: ["الحد الأقصى","200,000","350,000","500,000","750,000","1,000,000","+2,000,000"],
     zone_other: "منطقة أخرى",
     cta_call: "اتصل الآن", cta_whatsapp: "واتساب",
     footer: "© 2026 جيريمي ليروغنون — عقارات ماربيا",
@@ -701,6 +670,13 @@ function getSelectedText(selectEl) {
   return selectEl.options[selectEl.selectedIndex].text;
 }
 
+function formatBudgetValue(value) {
+  if (!value) return null;
+  const num = Number(value);
+  if (Number.isNaN(num)) return value;
+  return new Intl.NumberFormat(currentLang === 'fr' ? 'fr-FR' : currentLang === 'de' ? 'de-DE' : currentLang === 'it' ? 'it-IT' : currentLang === 'ar' ? 'ar-EG' : currentLang === 'en' ? 'en-US' : 'es-ES').format(num);
+}
+
 function buildWhatsAppMessage() {
   const t = translations[currentLang];
   const ns = t.wa_not_specified;
@@ -709,8 +685,8 @@ function buildWhatsAppMessage() {
   const property = getSelectedText(document.getElementById('propertyType'));
   const zone = getSelectedText(document.getElementById('zone'));
   const bedrooms = getSelectedText(document.getElementById('bedrooms'));
-  const budgetMin = getSelectedText(document.getElementById('budgetMin'));
-  const budgetMax = getSelectedText(document.getElementById('budgetMax'));
+  const budgetMin = document.getElementById('budgetMin').value.trim();
+  const budgetMax = document.getElementById('budgetMax').value.trim();
   const name = document.getElementById('clientName').value.trim();
   const phone = document.getElementById('clientPhone').value.trim();
 
@@ -724,7 +700,7 @@ function buildWhatsAppMessage() {
   msg += "🛏 " + t.wa_bedrooms + ": " + (bedrooms || ns) + "\n";
 
   if (budgetMin || budgetMax) {
-    const budgetStr = (budgetMin || "—") + " → " + (budgetMax || "—") + " €";
+    const budgetStr = (formatBudgetValue(budgetMin) || "—") + " → " + (formatBudgetValue(budgetMax) || "—") + " €";
     msg += "💰 " + t.wa_budget + ": " + budgetStr + "\n";
   } else {
     msg += "💰 " + t.wa_budget + ": " + ns + "\n";
@@ -738,7 +714,7 @@ function buildWhatsAppMessage() {
 
 function updateWhatsAppLink() {
   const msg = buildWhatsAppMessage();
-  document.getElementById('waBtn').href = "https://wa.me/33665333258?text=" + encodeURIComponent(msg);
+  document.getElementById('waBtn').href = "https://wa.me/34639774390?text=" + encodeURIComponent(msg);
 }
 
 // Listen for any form changes to update WhatsApp link in real-time
